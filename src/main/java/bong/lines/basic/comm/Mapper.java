@@ -8,18 +8,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import bong.lines.basic.handler.getLoginParam.LoginDTO;
-
-public class ParamUtils {
+public class Mapper {
     private Map<String, String> paramMap;
 
-    public ParamUtils(String url) {
+    public Mapper() {
+
+    }
+
+    public Mapper(String url) {
         paramMap = parseToMap(url);
     }
 
+    // TODO map 객체를 인자로 받아서 처리하게 수정.
     public <T> T map(Class<T> clazz) {
-        assert paramMap == null : "맵핑 참조값이 NULL입니다.";
-
         T newInstance = createInstance(clazz);
 
         List<Method> methods = Arrays.stream(clazz.getDeclaredMethods()).filter(m -> m.getName().startsWith("set")).collect(Collectors.toList());
@@ -27,7 +28,7 @@ public class ParamUtils {
             String key = convertJavaBeanMethodToFieldName(method.getName());
 
             try {    
-                // TODO 타입 형변환 현재는 문자열만 가능
+                // TODO 타입 형변환 이슈 (현재는 문자열만 가능)
                 method.invoke(newInstance, paramMap.get(key));
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 e.printStackTrace();
@@ -35,6 +36,49 @@ public class ParamUtils {
         }
 
         return newInstance;
+    }
+
+    public <T> String mapToJSON(T t) {
+        StringBuffer buff = new StringBuffer();
+        buff.append("{");
+        Arrays.stream(t.getClass().getDeclaredMethods()).filter(m -> m.getName().startsWith("get")).forEach(m -> {
+            buff.append("\""+ convertJavaBeanMethodToFieldName(m.getName()) +"\"");
+            buff.append(":");
+            Object value = getValue(t, m);
+            buff.append(",");
+        });
+        buff.deleteCharAt(buff.length()-1);
+        buff.append("}");
+        System.out.println(buff);
+
+        return t.toString();
+    }
+
+    private <T> Object getValue(T t, Method m) {
+        Object value = null;
+        try {
+            value = m.invoke(t);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        
+        
+        if (m.getReturnType().equals(String.class)) {
+            value = "\""+ value +"\"";
+        }
+        // } else if (m.getReturnType().equals(Integer.class)) {
+
+        // } else if (m.getReturnType().equals(Boolean.class)) {
+
+        // } else if (m.getReturnType().equals(Float.class)) {
+
+        // } else if (m.getReturnType().equals(Double.class)) {
+
+        // } else if (m.getReturnType().equals(Byte.class)) {
+
+        // } else if (m.getReturnType().equals(obj))
+
+        return value.toString();
     }
 
     private <T> T createInstance(Class<T> clazz) {
@@ -48,7 +92,7 @@ public class ParamUtils {
         return newInstance;
     }
 
-    // TODO 정규식
+    // TODO 정규식 적용
     private String convertJavaBeanMethodToFieldName(String beanMethodName) {
         String fixName = beanMethodName.substring(3, 4).toLowerCase();
         String name = beanMethodName.substring(4);
@@ -67,7 +111,7 @@ public class ParamUtils {
         return map;
     }
 
-    private String[] parserURLToField(String line) {
-        return line.split("\\?")[1].split("\\&");
+    private String[] parserURLToField(String param) {
+        return param.split("\\&");
     }
 }

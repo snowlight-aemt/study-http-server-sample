@@ -10,7 +10,7 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import bong.lines.basic.comm.ParamUtils;
+import bong.lines.basic.comm.Mapper;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -40,13 +40,18 @@ public class LoginParamHandler extends Thread{
                 if(line != null && line.contains("GET") && line.contains("user/create")){
                     log.info(line);
                     String screenName = line.split(" ")[1];
+                    String url = screenName.split("\\?")[0];
+                    String param = screenName.split("\\?")[1];
                     
-                    LoginDTO loginDTO = new ParamUtils(screenName).map(LoginDTO.class);
+                    LoginDTO loginDTO = new Mapper(param).map(LoginDTO.class);
                     System.out.println(loginDTO.toString());
                     // body = Objects.requireNonNull(
                     //         IndexHTMLHandler.class
                     //                 .getResourceAsStream("/templates" + screenName))
                     //                 .readAllBytes();
+
+                    
+
                 }
             } while (body == null);
 
