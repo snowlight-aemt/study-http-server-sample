@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.util.Objects;
 
 public class LoginHandler  extends Thread{
-    private static final Logger log = LoggerFactory.getLogger(IndexHTMLHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(LoginHandler.class);
 
     private Socket connection;
 
@@ -41,6 +41,7 @@ public class LoginHandler  extends Thread{
                                             .getResourceAsStream("/templates/user/" + screenName + ".html"))
                             .readAllBytes();
                 }
+                
             } while (body == null);
 
             DataOutputStream dos = new DataOutputStream(out);

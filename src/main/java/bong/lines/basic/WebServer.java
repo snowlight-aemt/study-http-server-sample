@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import bong.lines.basic.comm.WebHandlerInf;
-import bong.lines.basic.handler.getLoginParam.LoginParamHandler;
 import bong.lines.basic.handler.getloginhtml.LoginHandler;
+import bong.lines.basic.handler.loginsucceshtml.LoginSuccessHtml;
 
 public class WebServer {
     private static final Logger log = LoggerFactory.getLogger(WebServer.class);
@@ -18,11 +18,8 @@ public class WebServer {
 
     public static void main(String[] args) throws Exception {
         runServer(args, (connection) -> {
-            // LoginHandler helloWorldHandler = new LoginHandler(connection);
-            // helloWorldHandler.start();
-
-            LoginParamHandler loginParamHandler = new LoginParamHandler(connection);
-            loginParamHandler.start();
+            // new LoginHandler(connection).start();
+            new LoginSuccessHtml(connection).start();
             // http://localhost:8080/user/create?name=dddd&email=ffff%40naver.com&userId=ccccc&password=aaaa
         });
     }

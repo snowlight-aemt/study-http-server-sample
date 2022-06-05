@@ -1,4 +1,4 @@
-package bong.lines.basic.handler.getLoginParam;
+package bong.lines.basic.handler.loginsucceshtml;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
