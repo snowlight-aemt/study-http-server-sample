@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import bong.lines.basic.comm.Mapper;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -20,8 +19,11 @@ public class LoginSuccessHtml extends Thread {
     private static final Logger log = LoggerFactory.getLogger(LoginSuccessHtml.class);
     private Socket connection;
 
+    private final Mapper mapper;
+
     public LoginSuccessHtml(Socket connection) {
         this.connection = connection;
+        this.mapper = new Mapper();
     }
 
     @Override
@@ -45,11 +47,8 @@ public class LoginSuccessHtml extends Thread {
                     String url = screenName.split("\\?")[0];
                     String param = screenName.split("\\?")[1];
                     
-                    Mapper mapper = new Mapper();
-                    Map<String, String> map = mapper.mapUrlToMap(param);
-                    LoginDTO loginDTO = mapper.mapMapToObject(map, LoginDTO.class);
-                    System.out.println(loginDTO.toString());
-
+                    LoginDTO loginDTO = mapper.mapUrlToObject(param, LoginDTO.class);
+                    System.out.println(loginDTO);
                     System.out.println(mapper.mapObjectToJSON(loginDTO));
                     
                     body = Objects.requireNonNull(mapper.mapObjectToJSON(loginDTO)).getBytes();
@@ -63,6 +62,8 @@ public class LoginSuccessHtml extends Thread {
         }catch (Exception exception){
             log.error(exception.getMessage());
             exception.printStackTrace();
+        }finally {
+            log.info("끝");
         }
     }
 

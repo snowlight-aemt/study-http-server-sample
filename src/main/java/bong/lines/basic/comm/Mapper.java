@@ -12,6 +12,10 @@ import java.util.stream.Collectors;
 
 public class Mapper {
 
+    public <T> T mapUrlToObject(String urlParameter, Class<T> clazz) {
+        return mapMapToObject(mapUrlToMap(urlParameter), clazz);
+    }
+
     public Map<String, String> mapUrlToMap(String urlParameter) {
         Map<String, String> map = new HashMap<>();
         Arrays.stream(parserURLToField(urlParameter))

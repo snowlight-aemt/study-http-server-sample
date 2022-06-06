@@ -28,10 +28,22 @@ public class MapperTest {
         assertEquals("password_", map.getPassword());
     }
 
+    // TODO 수정 중 필요.
     @Test
     void testMapToJSON() {
-		// LoginDTO loginDTO = new LoginDTO("name_", "email_", "userId_", "password_");
         String actual = mapper.mapObjectToJSON(new ResponseDTO("name_", "email_", "userId_", "password_", false, 5));
         System.out.println(actual);
+    }
+
+    @Test
+    void testMapUrlToObject() {
+        String url = "name=name_&email=email_&userId=userId_&password=password_&num=5";
+        LoginDTO map = mapper.mapUrlToObject(url, LoginDTO.class);
+        System.out.println(map);
+
+        assertEquals("name_", map.getName());
+        assertEquals("email_", map.getEmail());
+        assertEquals("userId_", map.getUserId());
+        assertEquals("password_", map.getPassword());
     }
 }
