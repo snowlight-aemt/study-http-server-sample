@@ -32,6 +32,15 @@ public class LoginHandler  extends Thread{
             do {
                 line = bufferedReader.readLine();
 
+
+                if(line != null && line.contains("GET") && line.contains("user/create")){
+                    break;
+                }
+
+                if(line != null && line.contains("GET") && line.contains("favicon.ico")){
+                    break;
+                }
+
                 if(line != null && line.contains("GET") && line.contains("loginform.do")){
                     String screenName = line.split(" ")[1]
                             .replace("/", "")
@@ -41,7 +50,7 @@ public class LoginHandler  extends Thread{
                                             .getResourceAsStream("/templates/user/" + screenName + ".html"))
                             .readAllBytes();
                 }
-                
+
             } while (body == null);
 
             DataOutputStream dos = new DataOutputStream(out);

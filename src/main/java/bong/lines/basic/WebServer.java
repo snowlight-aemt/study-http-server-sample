@@ -18,7 +18,7 @@ public class WebServer {
 
     public static void main(String[] args) throws Exception {
         runServer(args, (connection) -> {
-            // new LoginHandler(connection).start();
+            new LoginHandler(connection).start();
             new LoginSuccessHtml(connection).start();
             // http://localhost:8080/user/create?name=dddd&email=ffff%40naver.com&userId=ccccc&password=aaaa
         });

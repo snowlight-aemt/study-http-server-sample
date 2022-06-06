@@ -41,6 +41,14 @@ public class LoginSuccessHtml extends Thread {
             do {
                 line = bufferedReader.readLine();
 
+                if(line != null && line.contains("GET") && line.contains("loginform.do")){
+                    break;
+                }
+
+                if(line != null && line.contains("GET") && line.contains("favicon.ico")){
+                    break;
+                }
+
                 if(line != null && line.contains("GET") && line.contains("user/create")){
                     log.info(line);
                     String screenName = line.split(" ")[1];
