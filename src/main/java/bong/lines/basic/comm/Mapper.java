@@ -94,20 +94,28 @@ public class Mapper {
         }
         return newInstance;
     }
-
+    
     // TODO 정규식 적용
     private String convertJavaBeanMethodToFieldName(String beanMethodName) {
-        if (beanMethodName.startsWith("get") || beanMethodName.startsWith("set")) {
+        if (isGetterAndSetterMethodName(beanMethodName)) {
             String fixName = beanMethodName.substring(3, 4).toLowerCase();
             String name = beanMethodName.substring(4);
             return fixName + name;
-        } else if (beanMethodName.startsWith("is")) {
+        } else if (isBooleanMehtodName(beanMethodName)) {
             String fixName = beanMethodName.substring(2, 3).toLowerCase();
             String name = beanMethodName.substring(3);
             return fixName + name;
         } else {
             throw new IllegalArgumentException("자바 빈 규약을 위반했습니다.");
         }
+    }
+
+    private boolean isBooleanMehtodName(String beanMethodName) {
+        return beanMethodName.startsWith("is");
+    }
+
+    private boolean isGetterAndSetterMethodName(String beanMethodName) {
+        return beanMethodName.startsWith("get") || beanMethodName.startsWith("set");
     }
 
     private String[] parserURLToField(String param) {
